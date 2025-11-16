@@ -1,76 +1,49 @@
-# TALLERES DEL CENTRO DE DÍA COMUNITARIO
+# TALLERES Y ACTIVIDADES DEL CENTRO DE DÍA COMUNITARIO
 
-## HORARIO GENERAL DE TALLERES
-Todos los talleres se realizan de 15:00 a 18:00 horas
-
----
-
-## 1. AMOR DE HUERTA
-
-**Descripción:**
-Taller de horticultura donde los participantes aprenden técnicas de cultivo y trabajo en la tierra.
-
-**Objetivos:**
-- Aprender técnicas de trabajo hortícola
-- Trabajo colaborativo en grupo
-- Conexión con la naturaleza
-- Desarrollo de habilidades prácticas
-- Producción de alimentos saludables
-
-**Actividades:**
-- Preparación de suelo
-- Siembra y trasplante
-- Cuidado de plantas
-- Cosecha
-- Compostaje
-- Manejo de herramientas
-
-**Beneficios:**
-- Actividad física al aire libre
-- Trabajo en equipo
-- Contacto con la naturaleza (efecto terapéutico)
-- Aprendizaje de habilidades útiles
-- Producción propia de alimentos
+## HORARIOS ESPECÍFICOS DE ATENCIÓN Y TALLERES
 
 ---
 
-## 2. EXPRESAMENTE
+## ATENCIÓN PROFESIONAL
 
-**Descripción:**
-Taller de expresión y comunicación a través de la palabra escrita y oral.
+### Psicoterapia Individual
+**Horarios:**
+- Martes: 9:00 a 12:00 hs
+- Miércoles: 9:00 a 12:00 hs
+- Viernes: 9:00 a 12:00 hs
 
-**Objetivos:**
-- Uso de la palabra como medio de expresión
-- Desarrollo de habilidades comunicacionales
-- Creación de contenido para "La Voz del CDC"
-- Fortalecimiento de la autoestima
-- Expresión de emociones y pensamientos
+**Modalidad:** Con turno previo
+**Contacto:** 299 4152668
 
-**Actividades:**
-- Escritura creativa
-- Producción de notas periodísticas
-- Entrevistas
-- Testimonios
-- Creación de contenido para el diario digital
-- Lectura y análisis de textos
+### Grupos Terapéuticos
+**Horario:** Miércoles 14:00 hs
+**Modalidad:** Grupo cerrado con inscripción previa
+**Coordinación:** Profesional de salud mental
 
-**Productos:**
-- Diario digital "La Voz del CDC"
-- Notas sobre salud mental
-- Entrevistas a profesionales
-- Testimonios de participantes
-- Reflexiones comunitarias
+### Primera Escucha - Demanda Espontánea
+**Horarios:**
+- Martes: 17:00 a 18:00 hs
+- Jueves: 17:00 a 18:00 hs
+- Viernes: 17:00 a 18:00 hs
+
+**Modalidad:** Sin turno previo, libre demanda
+**Descripción:** Espacio para primera consulta y orientación
 
 ---
 
-## 3. TRANSFORMARTE
+## TALLERES SOCIOTERAPÉUTICOS
+
+### 1. TALLER DE RECICLADO "TRANSFORM-ARTE"
+
+**Horarios:**
+- Lunes: 18:00 a 20:00 hs
+- Jueves: 18:00 a 20:00 hs
 
 **Descripción:**
-Taller de reciclado creativo y expresión artística.
+Taller de reciclado creativo y expresión artística donde se aprende a dar segundo uso a diferentes materiales.
 
 **Objetivos:**
 - Aprender técnicas de reciclado
-- Dar segundo uso a materiales
 - Expresión artística
 - Conciencia ambiental
 - Desarrollo de creatividad
@@ -99,45 +72,103 @@ Taller de reciclado creativo y expresión artística.
 
 ---
 
-## 4. ESPACIO GRUPAL
+### 2. TALLER DE HUERTA "AMOR DE HUERTA"
+
+**Horarios:**
+- Martes: 18:30 a 20:30 hs
+- Miércoles: 10:30 a 12:30 hs
+- Viernes: 18:30 a 20:30 hs
 
 **Descripción:**
-Espacio terapéutico grupal coordinado por profesional de salud mental.
+Taller de horticultura donde los participantes aprenden técnicas de cultivo y trabajo en la tierra en conjunto con otros.
 
 **Objetivos:**
-- Diálogo con otros participantes
-- Tratamiento de temas específicos
-- Contención grupal
-- Desarrollo de habilidades sociales
-- Apoyo mutuo
+- Aprender técnicas de trabajo hortícola
+- Trabajo colaborativo en grupo
+- Conexión con la naturaleza
+- Desarrollo de habilidades prácticas
+- Producción de alimentos saludables
+
+**Actividades:**
+- Preparación de suelo
+- Siembra y trasplante
+- Cuidado de plantas
+- Cosecha
+- Compostaje
+- Manejo de herramientas
+
+**Beneficios:**
+- Actividad física al aire libre
+- Trabajo en equipo
+- Contacto con la naturaleza (efecto terapéutico)
+- Aprendizaje de habilidades útiles
+- Producción propia de alimentos
+- Articulación con INTA
+
+---
+
+### 3. TALLER DE TEATRO LEÍDO Y ESCRITURA
+
+**Horario:** Viernes 18:00 a 19:00 hs
+
+**Descripción:**
+Taller de expresión a través del teatro leído y la escritura creativa. Forma parte del proyecto "ExpresaMente".
+
+**Objetivos:**
+- Uso de la palabra como medio de expresión
+- Desarrollo de habilidades comunicacionales
+- Creación de contenido para "La Voz del CDC"
+- Fortalecimiento de la autoestima
+- Expresión de emociones y pensamientos
+
+**Actividades:**
+- Teatro leído
+- Escritura creativa
+- Producción de notas periodísticas
+- Entrevistas
+- Testimonios
+- Creación de contenido para el diario digital
+
+**Productos:**
+- Diario digital "La Voz del CDC"
+- Notas sobre salud mental
+- Entrevistas a profesionales
+- Testimonios de participantes
+- Reflexiones comunitarias
+
+---
+
+### 4. ESPACIO GRUPAL PARA FAMILIAS
+
+**Descripción:**
+Espacio de orientación y apoyo para familiares de personas con consumos problemáticos o padecimientos mentales.
 
 **Modalidad:**
-- Grupo cerrado con inscripción previa
-- Coordinado por psicólogo/a
-- Encuentros semanales
+- Grupo abierto
+- Coordinado por profesional
 - Confidencialidad y respeto
 - Participación voluntaria
 
 **Temas abordados:**
-- Salud mental
-- Consumos problemáticos
-- Relaciones interpersonales
-- Manejo de emociones
-- Proyectos de vida
-- Situaciones de crisis
+- Acompañamiento familiar
+- Manejo de situaciones difíciles
+- Autocuidado
+- Recursos comunitarios
+- Apoyo mutuo entre familias
 
 ---
 
-## 5. COLUMNA RADIAL
+### 5. COLUMNA RADIAL
 
 **Descripción:**
-Programa radial sobre salud mental coordinado por el Lic. Sebastián Mendicoa.
+Programa radial sobre salud mental coordinado por el Lic. en Psicología Sebastián Mendicoa.
 
 **Objetivos:**
 - Difusión de información sobre salud mental
 - Desestigmatización
 - Educación comunitaria
 - Promoción de la salud mental
+- Llegar a la casa de los vecinos
 
 **Contenidos:**
 - Temáticas de salud mental

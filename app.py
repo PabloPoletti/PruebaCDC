@@ -156,8 +156,10 @@ Dependencias: SEDRONAR, Subsecretaría de Salud Mental y Adicciones de La Pampa,
     EMAIL = "cdc.25demayolp.coordinacion@gmail.com"
     
     DOC_TEXTS = [
-        # Información general
-        "El Centro de Día Comunitario de Colonia 25 de Mayo es un dispositivo territorial que aborda problemáticas de salud mental y consumos problemáticos de sustancias. Depende de SEDRONAR, la Subsecretaría de Salud Mental y Adicciones del Gobierno de La Pampa, y la Municipalidad de 25 de Mayo.",
+        # Información general e histórica
+        "El Centro de Día Comunitario de Colonia 25 de Mayo se puso en funcionamiento el 5 de octubre de 2021. Es un dispositivo territorial que aborda problemáticas de salud mental y consumos problemáticos de sustancias. Depende de SEDRONAR, la Subsecretaría de Salud Mental y Adicciones del Gobierno de La Pampa, y la Municipalidad de 25 de Mayo.",
+        "El CDC es uno de los efectores de la Red Integrada de Salud Mental y Adicciones con base en la Comunidad, dedicado a la promoción, prevención, tratamiento y principalmente la rehabilitación psicosocial. En poco tiempo ha logrado ser una institución de referencia local y de provincias vecinas.",
+        "Desde el inicio, más de 200 personas han recibido atención psicoterapéutica y más de 500 jóvenes y adultos han participado en talleres y actividades de prevención y promoción comunitaria.",
         
         # Ubicación y contacto
         f"Ubicación: Calle Trenel N°53, Colonia 25 de Mayo, La Pampa. Teléfono: {TELEFONO}. Email: {EMAIL}. Horarios: Lunes a viernes, mañana de 9 a 13 hs y tarde de 15 a 18:30 hs.",
@@ -172,13 +174,17 @@ Dependencias: SEDRONAR, Subsecretaría de Salud Mental y Adicciones de La Pampa,
         # Atención psiquiátrica
         "Los turnos de psiquiatría se realizan ÚNICAMENTE los viernes por la mañana. El psiquiatra atiende solo los viernes de 9:00 a 13:00 horas. Para sacar turno llamar al 299 4152668 o acercarse al CDC.",
         
-        # Talleres
-        "El CDC ofrece talleres de 15:00 a 18:00 horas: Amor de Huerta (horticultura), ExpresaMente (expresión y comunicación), TransformArte (reciclado creativo), Espacio Grupal (terapia grupal), y Columna Radial (difusión en salud mental).",
-        "Taller Amor de Huerta: aprendizaje de técnicas de trabajo hortícola en conjunto con otros participantes. Se trabaja en cultivo, siembra, cosecha y compostaje.",
-        "Taller ExpresaMente: uso de la palabra como medio de expresión y comunicación. Se crea contenido para el Diario Digital 'La Voz del CDC'.",
-        "Taller TransformArte: reciclado creativo donde se aprende a dar segundo uso a diferentes materiales mediante expresión artística.",
-        "Espacio Grupal: espacio terapéutico para dialogar con otros participantes sobre temas específicos, coordinado por profesional de salud mental.",
-        "Columna Radial: programa a cargo del Lic. en Psicología Sebastián Mendicoa sobre diferentes temáticas de salud mental.",
+        # Atención Profesional
+        "Psicoterapia individual: martes, miércoles y viernes de 9:00 a 12:00 horas. Con turno previo llamando al 299 4152668.",
+        "Grupos terapéuticos: miércoles a las 14:00 horas. Grupo cerrado con inscripción previa.",
+        "Primera Escucha - Demanda espontánea: martes, jueves y viernes de 17:00 a 18:00 horas. Sin turno previo, libre demanda.",
+        
+        # Talleres con horarios específicos
+        "Taller TransformArte (reciclado creativo): lunes y jueves de 18:00 a 20:00 horas. Reciclado creativo donde se aprende a dar segundo uso a diferentes materiales mediante expresión artística.",
+        "Taller Amor de Huerta (horticultura): martes y viernes de 18:30 a 20:30 horas, y miércoles de 10:30 a 12:30 horas. Aprendizaje de técnicas de trabajo hortícola en conjunto con otros participantes. Articulación con INTA.",
+        "Taller de Teatro Leído y Escritura: viernes de 18:00 a 19:00 horas. Forma parte del proyecto ExpresaMente. Uso de la palabra como medio de expresión y comunicación. Se crea contenido para el Diario Digital 'La Voz del CDC'.",
+        "Espacio Grupal terapéutico: miércoles a las 14:00 horas. Espacio para dialogar con otros participantes sobre temas específicos, coordinado por profesional de salud mental.",
+        "Columna Radial: programa a cargo del Lic. en Psicología Sebastián Mendicoa sobre diferentes temáticas de salud mental para llegar a la casa de los vecinos.",
         
         # Proyecto La Voz del CDC
         "La Voz del CDC es el diario digital del Centro con el objetivo de promover la salud mental y el bienestar en la comunidad, informar, sensibilizar y fomentar el cuidado de las emociones y abordar el consumo problemático.",
@@ -193,7 +199,8 @@ Dependencias: SEDRONAR, Subsecretaría de Salud Mental y Adicciones de La Pampa,
         "El CDC trabaja con enfoque territorial, integral, comunitario y personalizado. Se generan herramientas acordes a cada persona para potenciar su proyecto de vida.",
         
         # Articulación
-        "El CDC articula con equipos de salud locales, hospital, servicios sociales municipales, instituciones educativas y organizaciones comunitarias.",
+        "El CDC articula con equipos de salud locales, hospital, servicios sociales municipales, instituciones educativas, policía, bomberos, Club de Leones, iglesias, INTA (Instituto Nacional de Tecnología Agropecuaria) y diferentes áreas de la municipalidad.",
+        "El CDC abre los talleres a toda la comunidad para que sea un lugar de circulación, abierto, accesible y de pertenencia para toda la comunidad, no solo para usuarios con consumos problemáticos o padecimientos mentales.",
         
         # Inscripción talleres
         "Para inscribirse en talleres: acercarse al CDC en horario de atención, llamar al 299 4152668, o enviar email a cdc.25demayolp.coordinacion@gmail.com. Los talleres son gratuitos y los materiales son provistos por el CDC.",
@@ -373,19 +380,30 @@ def bot_response(mensaje, user_id):
         
         # 4) Talleres disponibles
         if msg == "4":
-            return """🎨 *Talleres del CDC* (15:00 a 18:00 hs)
+            state["step"] = "talleres_menu"
+            return """🎨 *Talleres del CDC*
 
-1️⃣ **Amor de Huerta** - Horticultura y cultivo
-2️⃣ **ExpresaMente** - Expresión y comunicación
-3️⃣ **TransformArte** - Reciclado creativo
+1️⃣ **TransformArte** - Reciclado creativo
+   📅 Lunes y Jueves 18:00-20:00
+
+2️⃣ **Amor de Huerta** - Horticultura
+   📅 Martes y Viernes 18:30-20:30
+   📅 Miércoles 10:30-12:30
+
+3️⃣ **Teatro Leído y Escritura**
+   📅 Viernes 18:00-19:00
+
 4️⃣ **Espacio Grupal** - Terapia grupal
-5️⃣ **Columna Radial** - Difusión en salud mental
+   📅 Miércoles 14:00
+
+5️⃣ **Columna Radial** - Salud mental
 
 📌 Talleres gratuitos
 📌 Materiales provistos por el CDC
 📌 Inscripción: 299 4152668
 
-💡 Escribí el número del taller para más info""" + menu_principal()
+💡 Escribí el número del taller para más info
+0️⃣ Volver al menú principal"""
         
         # 5) Pedir turno con psiquiatra
         if msg == "5":
@@ -431,6 +449,155 @@ Elegí una fecha:
         respuesta = rag_answer(raw)
         state["step"] = "menu"
         return f"🤖 {respuesta}" + menu_principal()
+    
+    # MENÚ DE TALLERES DETALLADO
+    if state["step"] == "talleres_menu":
+        if msg == "0":
+            state["step"] = "menu"
+            return "Volviendo al menú principal..." + menu_principal()
+        
+        if msg == "1":
+            state["step"] = "menu"
+            return """🎨 *TALLER TRANSFORMARTE*
+Reciclado creativo y expresión artística
+
+📅 **Horarios:**
+• Lunes: 18:00 a 20:00 hs
+• Jueves: 18:00 a 20:00 hs
+
+📝 **Descripción:**
+Taller donde aprendés a dar segundo uso a diferentes materiales mediante la expresión artística. Trabajamos con papel, cartón, plásticos, telas, madera y vidrio.
+
+🎯 **Actividades:**
+• Reciclado de materiales
+• Creación de objetos decorativos
+• Técnicas de transformación
+• Pintura y decoración
+
+✨ **Beneficios:**
+• Desarrollo de creatividad
+• Conciencia ecológica
+• Habilidades manuales
+• Posibilidad de generar ingresos
+
+📞 Inscripción: 299 4152668
+💚 Taller gratuito con materiales incluidos""" + menu_principal()
+        
+        if msg == "2":
+            state["step"] = "menu"
+            return """🌱 *TALLER AMOR DE HUERTA*
+Horticultura y cultivo en comunidad
+
+📅 **Horarios:**
+• Martes: 18:30 a 20:30 hs
+• Miércoles: 10:30 a 12:30 hs
+• Viernes: 18:30 a 20:30 hs
+
+📝 **Descripción:**
+Aprendé técnicas de cultivo y trabajo en la tierra junto a otros participantes. Trabajo en articulación con INTA.
+
+🎯 **Actividades:**
+• Preparación de suelo
+• Siembra y trasplante
+• Cuidado de plantas
+• Cosecha
+• Compostaje
+
+✨ **Beneficios:**
+• Actividad física al aire libre
+• Trabajo en equipo
+• Contacto con la naturaleza
+• Producción de alimentos saludables
+
+📞 Inscripción: 299 4152668
+💚 Taller gratuito con herramientas incluidas""" + menu_principal()
+        
+        if msg == "3":
+            state["step"] = "menu"
+            return """🎭 *TALLER DE TEATRO LEÍDO Y ESCRITURA*
+Expresión a través del teatro y la palabra
+
+📅 **Horario:**
+• Viernes: 18:00 a 19:00 hs
+
+📝 **Descripción:**
+Espacio de expresión a través del teatro leído y la escritura creativa. Forma parte del proyecto "ExpresaMente".
+
+🎯 **Actividades:**
+• Teatro leído
+• Escritura creativa
+• Producción de notas para "La Voz del CDC"
+• Entrevistas y testimonios
+
+✨ **Beneficios:**
+• Desarrollo de habilidades comunicacionales
+• Fortalecimiento de autoestima
+• Expresión de emociones
+• Creación de contenido comunitario
+
+📞 Inscripción: 299 4152668
+💚 Taller gratuito""" + menu_principal()
+        
+        if msg == "4":
+            state["step"] = "menu"
+            return """👥 *ESPACIO GRUPAL TERAPÉUTICO*
+Terapia grupal coordinada por profesional
+
+📅 **Horario:**
+• Miércoles: 14:00 hs
+
+📝 **Descripción:**
+Espacio terapéutico para dialogar con otros participantes sobre temas específicos, coordinado por profesional de salud mental.
+
+🎯 **Temas abordados:**
+• Salud mental
+• Consumos problemáticos
+• Relaciones interpersonales
+• Manejo de emociones
+• Proyectos de vida
+
+✨ **Modalidad:**
+• Grupo cerrado con inscripción previa
+• Confidencialidad y respeto
+• Participación voluntaria
+• Apoyo mutuo
+
+📞 Inscripción: 299 4152668
+💚 Espacio gratuito""" + menu_principal()
+        
+        if msg == "5":
+            state["step"] = "menu"
+            return """📻 *COLUMNA RADIAL*
+Difusión en salud mental
+
+👨‍⚕️ **Coordinador:**
+Lic. en Psicología Sebastián Mendicoa
+
+📝 **Descripción:**
+Programa radial sobre diferentes temáticas de salud mental para llegar a la casa de los vecinos.
+
+🎯 **Contenidos:**
+• Salud mental
+• Prevención de consumos problemáticos
+• Recursos comunitarios
+• Entrevistas a profesionales
+• Testimonios
+
+📡 **Alcance:**
+• Difusión radial local
+• Publicación en redes sociales
+• Archivo disponible en la web
+
+💚 Programa de difusión comunitaria""" + menu_principal()
+        
+        return "❌ Opción inválida. Elegí un número del 1 al 5, o 0 para volver." + "\n\n" + """🎨 *Talleres del CDC*
+
+1️⃣ TransformArte
+2️⃣ Amor de Huerta
+3️⃣ Teatro Leído y Escritura
+4️⃣ Espacio Grupal
+5️⃣ Columna Radial
+0️⃣ Volver al menú principal"""
     
     # BUSCAR TURNOS POR DNI
     if state["step"] == "buscar_dni_confirm":
