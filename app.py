@@ -26,6 +26,35 @@ st.markdown("""
     /* Fondo general */
     .stApp {
         background-color: #e5ddd5;
+        position: relative;
+    }
+    
+    /* Imagen de fondo estilo lienzo (watermark) */
+    .stApp > div:first-child {
+        background-image: url('https://raw.githubusercontent.com/PabloPoletti/PruebaCDC/main/images/cdc_frente.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        position: relative;
+    }
+    
+    .stApp > div:first-child::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(229, 221, 213, 0.90);
+        z-index: 0;
+        pointer-events: none;
+    }
+    
+    /* Asegurar que el contenido esté por encima del overlay */
+    .stApp > div:first-child > * {
+        position: relative;
+        z-index: 1;
     }
     
     /* Ocultar menú y footer de Streamlit */
@@ -33,15 +62,21 @@ st.markdown("""
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* Título principal */
+    /* Título principal - contenedor de imagen */
     .main-title {
-        background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
-        color: white;
-        padding: 20px;
+        padding: 0;
         border-radius: 10px;
         text-align: center;
         margin-bottom: 20px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        overflow: hidden;
+    }
+    
+    .main-title img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 10px;
     }
     
     /* Mensajes del bot */
@@ -707,12 +742,13 @@ Programa radial sobre diferentes temáticas de salud mental para llegar a la cas
 # INTERFAZ STREAMLIT
 # =====================================================
 
-# Título con imagen
-st.markdown('<div class="main-title"><h1>🏥 Centro de Día Comunitario</h1><p>25 de Mayo - La Pampa</p></div>', unsafe_allow_html=True)
-
-# Imagen del Centro de Día (si existe)
-if os.path.exists("images/cdc_frente.jpg"):
-    st.image("images/cdc_frente.jpg", use_container_width=True, caption="Centro de Día Comunitario - 25 de Mayo")
+# Header con imagen (si existe la imagen del header, sino usar título HTML)
+if os.path.exists("images/header_cdc.jpg"):
+    st.markdown('<div class="main-title">', unsafe_allow_html=True)
+    st.image("images/header_cdc.jpg", use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+else:
+    st.markdown('<div class="main-title"><h1>🏥 Centro de Día Comunitario</h1><p>25 de Mayo - La Pampa</p></div>', unsafe_allow_html=True)
 
 # Inicializar historial de chat
 if "messages" not in st.session_state:

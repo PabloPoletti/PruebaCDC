@@ -4,13 +4,21 @@ Esta carpeta contiene las imágenes utilizadas en la aplicación del bot.
 
 ## Imágenes requeridas:
 
-### 1. `cdc_frente.jpg`
+### 1. `header_cdc.jpg` ⭐ NUEVA
+- **Descripción**: Imagen del header con fondo verde
+- **Contenido**: "Centro de Día Comunitario" + "25 de Mayo - La Pampa"
+- **Uso**: Reemplaza el título de texto en la parte superior
+- **Dimensiones recomendadas**: 800x200 px (o similar, se ajusta automáticamente)
+- **Estado**: OPCIONAL - Si no existe, se usa título HTML
+
+### 2. `cdc_frente.jpg`
 - **Descripción**: Foto del frente del Centro de Día Comunitario
 - **Ubicación**: Trenel 53, Colonia 25 de Mayo, La Pampa
-- **Uso**: Se muestra en el header de la aplicación
-- **Dimensiones recomendadas**: 1200x600 px (o similar, se ajusta automáticamente)
+- **Uso**: Se muestra como fondo sutil (lienzo/watermark) de toda la aplicación
+- **Dimensiones recomendadas**: 1920x1080 px (o similar)
+- **Estado**: ACTIVA ✅
 
-### 2. `logos_institucionales.jpg`
+### 3. `logos_institucionales.jpg`
 - **Descripción**: Logos de las instituciones que apoyan al CDC
 - **Instituciones**:
   - Ministerio de Salud - Subsecretaría de Salud Mental y Adicciones
@@ -19,6 +27,7 @@ Esta carpeta contiene las imágenes utilizadas en la aplicación del bot.
   - Contá con Nosotr@s
 - **Uso**: Se muestra en el footer de la aplicación
 - **Dimensiones recomendadas**: 1200x300 px (o similar, se ajusta automáticamente)
+- **Estado**: ACTIVA ✅
 
 ## Cómo agregar las imágenes:
 
