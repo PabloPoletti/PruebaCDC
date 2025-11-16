@@ -44,3 +44,15 @@ Thumbs.db
 # Cursor history
 .specstory/
 
+# Archivos de prueba y documentación local
+codigo*.md
+CAMBIOS*.md
+ACTUALIZACION*.md
+COMANDOS*.md
+INSTRUCCIONES*.md
+LEEME*.txt
+RESUMEN*.md
+subir_a_github.bat
+*.docx
+*.doc
+
