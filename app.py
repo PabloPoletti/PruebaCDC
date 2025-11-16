@@ -46,7 +46,7 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(229, 221, 213, 0.75);
+        background: rgba(229, 221, 213, 0.25);
         z-index: 0;
         pointer-events: none;
     }
