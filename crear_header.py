@@ -20,12 +20,13 @@ width, height = img.size
 
 print(f"Dimensiones originales: {width}x{height}")
 
-# Crear una nueva imagen con área verde más grande (igual tamaño que el área celeste)
-new_height = height * 2  # Duplicar la altura para que verde = celeste
+# Crear una nueva imagen con área verde reducida (la mitad del área celeste)
+verde_height = height // 2  # Área verde = mitad del área celeste
+new_height = height + verde_height  # Altura total = logos + área verde
 new_img = Image.new('RGB', (width, new_height), color='#3b9b8f')  # Color verde CDC
 
 # Pegar la imagen de logos en la parte inferior
-new_img.paste(img, (0, height))
+new_img.paste(img, (0, verde_height))
 
 # Crear objeto para dibujar
 draw = ImageDraw.Draw(new_img)
@@ -49,19 +50,25 @@ except:
 title = "Centro de Dia Comunitario"
 subtitle = "25 de Mayo - La Pampa"
 
-# Calcular posiciones para centrar el texto en el área verde
+# Calcular posiciones para centrar el texto en el área verde (más pequeña)
 # Para el título
 bbox_title = draw.textbbox((0, 0), title, font=font_title)
 title_width = bbox_title[2] - bbox_title[0]
 title_height = bbox_title[3] - bbox_title[1]
 title_x = (width - title_width) // 2
-title_y = (height - title_height - 100) // 2  # Centrado verticalmente en área verde, un poco arriba
 
-# Para el subtítulo
+# Calcular altura total de los dos textos con espacio
 bbox_subtitle = draw.textbbox((0, 0), subtitle, font=font_subtitle)
 subtitle_width = bbox_subtitle[2] - bbox_subtitle[0]
+subtitle_height = bbox_subtitle[3] - bbox_subtitle[1]
+total_text_height = title_height + 30 + subtitle_height  # 30px de espacio entre textos
+
+# Centrar verticalmente todo el bloque de texto en el área verde
+title_y = (verde_height - total_text_height) // 2
+
+# Para el subtítulo
 subtitle_x = (width - subtitle_width) // 2
-subtitle_y = title_y + title_height + 40  # Debajo del título con espacio
+subtitle_y = title_y + title_height + 30  # Debajo del título con espacio
 
 # Dibujar el texto en blanco
 draw.text((title_x, title_y), title, fill='white', font=font_title)
