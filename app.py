@@ -721,6 +721,10 @@ if "messages" not in st.session_state:
     welcome_msg = bot_response("hola", "web_user")
     st.session_state.messages.append({"role": "assistant", "content": welcome_msg})
 
+# Inicializar contador para limpiar input
+if "input_counter" not in st.session_state:
+    st.session_state.input_counter = 0
+
 # Mostrar historial de chat
 chat_container = st.container()
 with chat_container:
@@ -735,7 +739,7 @@ with st.container():
     col1, col2 = st.columns([5, 1])
     
     with col1:
-        user_input = st.text_input("Escribí tu mensaje...", key="user_input", label_visibility="collapsed")
+        user_input = st.text_input("Escribí tu mensaje...", key=f"user_input_{st.session_state.input_counter}", label_visibility="collapsed")
     
     with col2:
         send_button = st.button("📤 Enviar")
@@ -751,6 +755,9 @@ if send_button and user_input:
     # Agregar respuesta del bot
     st.session_state.messages.append({"role": "assistant", "content": bot_reply})
     
+    # Incrementar contador para limpiar input
+    st.session_state.input_counter += 1
+    
     # Recargar para mostrar nuevos mensajes
     st.rerun()
 
@@ -759,6 +766,8 @@ if st.button("🔄 Nueva conversación"):
     st.session_state.messages = []
     if "user_states" in st.session_state:
         st.session_state.user_states = {}
+    # Reiniciar contador del input
+    st.session_state.input_counter = 0
     # Agregar mensaje de bienvenida automático
     welcome_msg = bot_response("hola", "web_user")
     st.session_state.messages.append({"role": "assistant", "content": welcome_msg})
