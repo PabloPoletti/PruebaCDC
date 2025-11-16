@@ -809,13 +809,8 @@ if st.button("🔄 Nueva conversación"):
     st.session_state.messages.append({"role": "assistant", "content": welcome_msg})
     st.rerun()
 
-# Footer con logos institucionales
+# Footer
 st.markdown("---")
-
-# Logos de las instituciones (si existen)
-if os.path.exists("images/logos_institucionales.jpg"):
-    st.image("images/logos_institucionales.jpg", use_container_width=True)
-
 st.markdown("💚 *Bot de atención automatizada - Centro de Día Comunitario 25 de Mayo*")
 st.markdown("*Trabajo conjunto: SEDRONAR, Subsecretaría de Salud Mental y Adicciones de La Pampa, Municipalidad de 25 de Mayo*")
 
