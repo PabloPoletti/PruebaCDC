@@ -809,8 +809,20 @@ if st.button("🔄 Nueva conversación"):
     st.session_state.messages.append({"role": "assistant", "content": welcome_msg})
     st.rerun()
 
-# Footer
+# Footer con fondo verde
 st.markdown("---")
-st.markdown("💚 *Bot de atención automatizada - Centro de Día Comunitario 25 de Mayo*")
-st.markdown("*Trabajo conjunto: SEDRONAR, Subsecretaría de Salud Mental y Adicciones de La Pampa, Municipalidad de 25 de Mayo*")
+st.markdown("""
+<div style="
+    background: linear-gradient(135deg, #3b9b8f 0%, #2d7a70 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+">
+    <p style="margin: 5px 0; font-size: 16px;">💚 <em>Bot de atención automatizada - Centro de Día Comunitario 25 de Mayo</em></p>
+    <p style="margin: 5px 0; font-size: 14px;"><em>Trabajo conjunto: SEDRONAR, Subsecretaría de Salud Mental y Adicciones de La Pampa, Municipalidad de 25 de Mayo</em></p>
+</div>
+""", unsafe_allow_html=True)
 
