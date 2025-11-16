@@ -134,37 +134,87 @@ def init_llm():
 def init_rag():
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     
-    INFO_CENTRO = """
-Dispositivo Territorial Comunitario
-Subsecretaría de Salud Mental y Adicciones del Gobierno de La Pampa
-Municipalidad de 25 de Mayo. SEDRONAR.
-Secretaría de Políticas Integrales sobre Drogas de la Nación Argentina.
-"""
+    # Cargar archivos de datos externos
+    try:
+        with open('data/info_cdc.txt', 'r', encoding='utf-8') as f:
+            info_cdc = f.read()
+        with open('data/talleres.txt', 'r', encoding='utf-8') as f:
+            talleres = f.read()
+        with open('data/preguntas_frecuentes.txt', 'r', encoding='utf-8') as f:
+            preguntas = f.read()
+    except:
+        # Fallback si no existen los archivos
+        info_cdc = talleres = preguntas = ""
     
-    HORARIOS = "Lunes a Viernes de 8 a 13 y 16 a 19"
-    DIRECCION = "Trenel 53 - 25 de Mayo (La Pampa)"
-    TELEFONO = "0299 524-3358"
+    INFO_CENTRO = """Centro de Día Comunitario - Colonia 25 de Mayo
+Dispositivo Territorial para salud mental y consumos problemáticos
+Dependencias: SEDRONAR, Subsecretaría de Salud Mental y Adicciones de La Pampa, Municipalidad de 25 de Mayo"""
+    
+    HORARIOS = "Lunes a Viernes: Mañana 9 a 13 hs - Tarde 15 a 18:30 hs"
+    DIRECCION = "Trenel 53, Colonia 25 de Mayo, La Pampa"
+    TELEFONO = "299 4152668"
+    EMAIL = "cdc.25demayolp.coordinacion@gmail.com"
     
     DOC_TEXTS = [
-        "El Centro de Día Comunitario de 25 de Mayo es un Dispositivo Territorial Comunitario que brinda atención en salud mental y adicciones.",
-        "El Centro depende de la Subsecretaría de Salud Mental y Adicciones del Gobierno de La Pampa, la Municipalidad de 25 de Mayo, y SEDRONAR (Secretaría de Políticas Integrales sobre Drogas de la Nación Argentina).",
-        f"El Centro atiende de lunes a viernes en dos turnos. Dirección: {DIRECCION}. Teléfono: {TELEFONO}.",
-        "Horarios de atención: LUNES de 8 a 13 y de 16 a 19. MARTES de 8 a 13 y de 16 a 19. MIÉRCOLES de 8 a 13 y de 16 a 19. JUEVES de 8 a 13 y de 16 a 19. VIERNES de 8 a 13 y de 16 a 19.",
-        "El jueves el Centro trabaja de 8 a 13 horas (mañana) y de 16 a 19 horas (tarde). Son dos turnos: mañana y tarde.",
-        "Los turnos de psiquiatría se realizan ÚNICAMENTE los viernes por la mañana de 8:00 a 11:30. El psiquiatra solo atiende los viernes.",
-        "El Centro articula con el Municipio, la Subsecretaría de Salud Mental y SEDRONAR para brindar atención integral.",
-        "El Centro ofrece servicios de salud mental, atención psiquiátrica, y abordaje de problemáticas de adicciones en la comunidad de 25 de Mayo.",
-        "Todos los días de la semana (lunes a viernes) el Centro tiene horario de mañana (8 a 13) y horario de tarde (16 a 19)."
+        # Información general
+        "El Centro de Día Comunitario de Colonia 25 de Mayo es un dispositivo territorial que aborda problemáticas de salud mental y consumos problemáticos de sustancias. Depende de SEDRONAR, la Subsecretaría de Salud Mental y Adicciones del Gobierno de La Pampa, y la Municipalidad de 25 de Mayo.",
+        
+        # Ubicación y contacto
+        f"Ubicación: Calle Trenel N°53, Colonia 25 de Mayo, La Pampa. Teléfono: {TELEFONO}. Email: {EMAIL}. Horarios: Lunes a viernes, mañana de 9 a 13 hs y tarde de 15 a 18:30 hs.",
+        
+        # Horarios específicos
+        "El Centro atiende de lunes a viernes. Horario de mañana: 9:00 a 13:00 horas. Horario de tarde: 15:00 a 18:30 horas. No atiende sábados ni domingos.",
+        "Los lunes el Centro trabaja de 9 a 13 horas y de 15 a 18:30 horas. Los martes de 9 a 13 y de 15 a 18:30. Los miércoles de 9 a 13 y de 15 a 18:30. Los jueves de 9 a 13 y de 15 a 18:30. Los viernes de 9 a 13 y de 15 a 18:30.",
+        
+        # Servicios
+        "El CDC ofrece: abordajes clínicos individuales con nexo en equipos de salud locales, acompañamientos terapéuticos singulares y grupales, seguimientos psicosociales integrales, actividades grupales y comunitarias de prevención y promoción.",
+        
+        # Atención psiquiátrica
+        "Los turnos de psiquiatría se realizan ÚNICAMENTE los viernes por la mañana. El psiquiatra atiende solo los viernes de 9:00 a 13:00 horas. Para sacar turno llamar al 299 4152668 o acercarse al CDC.",
+        
+        # Talleres
+        "El CDC ofrece talleres de 15:00 a 18:00 horas: Amor de Huerta (horticultura), ExpresaMente (expresión y comunicación), TransformArte (reciclado creativo), Espacio Grupal (terapia grupal), y Columna Radial (difusión en salud mental).",
+        "Taller Amor de Huerta: aprendizaje de técnicas de trabajo hortícola en conjunto con otros participantes. Se trabaja en cultivo, siembra, cosecha y compostaje.",
+        "Taller ExpresaMente: uso de la palabra como medio de expresión y comunicación. Se crea contenido para el Diario Digital 'La Voz del CDC'.",
+        "Taller TransformArte: reciclado creativo donde se aprende a dar segundo uso a diferentes materiales mediante expresión artística.",
+        "Espacio Grupal: espacio terapéutico para dialogar con otros participantes sobre temas específicos, coordinado por profesional de salud mental.",
+        "Columna Radial: programa a cargo del Lic. en Psicología Sebastián Mendicoa sobre diferentes temáticas de salud mental.",
+        
+        # Proyecto La Voz del CDC
+        "La Voz del CDC es el diario digital del Centro con el objetivo de promover la salud mental y el bienestar en la comunidad, informar, sensibilizar y fomentar el cuidado de las emociones y abordar el consumo problemático.",
+        
+        # Modalidad de atención
+        "El CDC funciona con libre demanda para primera consulta, no se necesita derivación médica. Para seguimientos se programa turno. Los servicios y talleres son gratuitos.",
+        
+        # Población objetivo
+        "El CDC atiende a personas con problemáticas de salud mental, consumos problemáticos de sustancias, familias y entorno de personas en tratamiento, y realiza actividades de prevención abiertas a toda la comunidad.",
+        
+        # Enfoque
+        "El CDC trabaja con enfoque territorial, integral, comunitario y personalizado. Se generan herramientas acordes a cada persona para potenciar su proyecto de vida.",
+        
+        # Articulación
+        "El CDC articula con equipos de salud locales, hospital, servicios sociales municipales, instituciones educativas y organizaciones comunitarias.",
+        
+        # Inscripción talleres
+        "Para inscribirse en talleres: acercarse al CDC en horario de atención, llamar al 299 4152668, o enviar email a cdc.25demayolp.coordinacion@gmail.com. Los talleres son gratuitos y los materiales son provistos por el CDC.",
+        
+        # Información adicional
+        "El CDC cuenta con equipo de psicólogos, psiquiatras, acompañantes terapéuticos y talleristas. También tiene programa de bolsa de trabajo para participantes.",
+        
+        # Datos de archivos externos
+        info_cdc,
+        talleres,
+        preguntas
     ]
     
-    docs = [Document(page_content=t) for t in DOC_TEXTS]
+    docs = [Document(page_content=t) for t in DOC_TEXTS if t.strip()]
     vector_store = Chroma.from_documents(docs, embeddings)
-    retriever = vector_store.as_retriever(search_kwargs={"k": 3})
+    retriever = vector_store.as_retriever(search_kwargs={"k": 5})
     
-    return retriever, INFO_CENTRO, HORARIOS, DIRECCION, TELEFONO
+    return retriever, INFO_CENTRO, HORARIOS, DIRECCION, TELEFONO, EMAIL
 
 llm = init_llm()
-retriever, INFO_CENTRO, HORARIOS, DIRECCION, TELEFONO = init_rag()
+retriever, INFO_CENTRO, HORARIOS, DIRECCION, TELEFONO, EMAIL = init_rag()
 
 # =====================================================
 # FUNCIONES RAG
@@ -250,11 +300,13 @@ def menu_principal():
 
 📋 *Menú principal*
 Elegí una opción:
-1️⃣ Sobre el Centro
-2️⃣ Horarios / Dirección / Teléfono
-3️⃣ Pedir turno con psiquiatra
-4️⃣ Ver turnos registrados
-5️⃣ Pregunta abierta (IA + RAG)
+1️⃣ ¿Qué es el Centro de Día?
+2️⃣ Horarios y Contacto
+3️⃣ Servicios que ofrecemos
+4️⃣ Talleres disponibles
+5️⃣ Pedir turno con psiquiatra
+6️⃣ Ver mis turnos
+7️⃣ Pregunta abierta (IA)
 👉 Escribí el número de la opción."""
 
 # =====================================================
@@ -273,7 +325,12 @@ def bot_response(mensaje, user_id):
             "data": {},
             "mis_turnos": []
         }
-        return "👋 *Bienvenido/a al Centro de Día Comunitario 25 de Mayo*" + menu_principal()
+        return """👋 *Bienvenido/a al Centro de Día Comunitario*
+*Colonia 25 de Mayo - La Pampa*
+
+🏥 Espacio de salud mental y consumos problemáticos
+💚 Atención gratuita y sin derivación médica
+🤝 Te acompañamos en tu proyecto de vida""" + menu_principal()
     
     state = st.session_state.user_states[user_id]
     msg = mensaje.lower().strip()
@@ -281,22 +338,74 @@ def bot_response(mensaje, user_id):
     
     # MENÚ PRINCIPAL
     if state["step"] == "menu":
+        # 1) ¿Qué es el Centro de Día?
         if msg == "1":
-            return INFO_CENTRO + menu_principal()
+            return INFO_CENTRO + "\n\n" + rag_answer("¿Qué es el Centro de Día y qué hace?") + menu_principal()
         
+        # 2) Horarios y Contacto
         if msg == "2":
-            return f"📍 Dirección: {DIRECCION}\n🕒 Horarios: {HORARIOS}\n📞 Teléfono: {TELEFONO}" + menu_principal()
+            return f"""📍 *Ubicación y Contacto*
+
+🏠 Dirección: {DIRECCION}
+🕒 Horarios: {HORARIOS}
+📞 Teléfono: {TELEFONO}
+📧 Email: {EMAIL}
+🌐 Web: https://sites.google.com/view/centro-de-da-25-de-mayo/
+
+💡 Podés acercarte sin turno para primera consulta.""" + menu_principal()
         
+        # 3) Servicios que ofrecemos
         if msg == "3":
+            return """🏥 *Servicios del CDC*
+
+✅ Abordajes clínicos individuales
+✅ Acompañamientos terapéuticos
+✅ Seguimientos psicosociales
+✅ Atención psiquiátrica (viernes)
+✅ Atención psicológica
+✅ Actividades grupales
+✅ Talleres diversos
+✅ Bolsa de trabajo
+
+📌 Todos los servicios son gratuitos
+📌 No se necesita derivación médica
+📌 Primera consulta: libre demanda""" + menu_principal()
+        
+        # 4) Talleres disponibles
+        if msg == "4":
+            return """🎨 *Talleres del CDC* (15:00 a 18:00 hs)
+
+1️⃣ **Amor de Huerta** - Horticultura y cultivo
+2️⃣ **ExpresaMente** - Expresión y comunicación
+3️⃣ **TransformArte** - Reciclado creativo
+4️⃣ **Espacio Grupal** - Terapia grupal
+5️⃣ **Columna Radial** - Difusión en salud mental
+
+📌 Talleres gratuitos
+📌 Materiales provistos por el CDC
+📌 Inscripción: 299 4152668
+
+💡 Escribí el número del taller para más info""" + menu_principal()
+        
+        # 5) Pedir turno con psiquiatra
+        if msg == "5":
             state["step"] = "fecha"
             fechas = get_fridays()
             listado = "\n".join([f"{i+1}) {f}" for i, f in enumerate(fechas)])
-            return f"📅 *Turnos de psiquiatría*\n\nLos turnos son *solo los viernes por la mañana*.\n\nElegí una fecha:\n{listado}\n\n👉 Respondé con el número correspondiente."
+            return f"""📅 *Turnos de Psiquiatría*
+
+⏰ Atención: Solo viernes de 9:00 a 13:00 hs
+
+Elegí una fecha:
+{listado}
+
+👉 Respondé con el número correspondiente."""
         
-        if msg == "4":
+        # 6) Ver mis turnos
+        if msg == "6":
             mis_turnos = state["mis_turnos"]
             if len(mis_turnos) > 0:
-                text = "📋 *Tus turnos en esta sesión:*\n\n"
+                text = "📋 *Tus turnos registrados:*\n\n"
                 for t in mis_turnos:
                     text += f"📅 {t['fecha']} - ⏰ {t['hora']}\n👤 {t['nombre']} (DNI {t['dni']})\n🧠 Motivo: {t['motivo']}\n📌 Primera vez: {t['primera_vez']}\n\n"
                 return text + menu_principal()
@@ -304,17 +413,18 @@ def bot_response(mensaje, user_id):
             state["step"] = "buscar_dni_confirm"
             return "📭 No registraste turnos en esta sesión.\n\n¿Querés buscar si ya tenés turnos cargados anteriormente por DNI?\n👉 Respondé *si* o *no*."
         
-        if msg == "5":
+        # 7) Pregunta abierta (IA)
+        if msg == "7":
             state["step"] = "rag"
             return "🧠 Escribí tu pregunta sobre el Centro de Día:"
         
         # Detección automática de preguntas
-        palabras_pregunta = ["que", "cual", "cuando", "donde", "como", "quien", "horario", "turno", "psiquiatra", "atiende", "dia", "telefono", "direccion"]
+        palabras_pregunta = ["que", "cual", "cuando", "donde", "como", "quien", "horario", "turno", "psiquiatra", "atiende", "dia", "telefono", "direccion", "taller", "servicio"]
         if any(palabra in msg for palabra in palabras_pregunta) or "?" in raw:
             respuesta = rag_answer(raw)
             return f"🤖 {respuesta}" + menu_principal()
         
-        return "❌ Opción inválida. Elegí un número del 1 al 5." + menu_principal()
+        return "❌ Opción inválida. Elegí un número del 1 al 7." + menu_principal()
     
     # RAG
     if state["step"] == "rag":
