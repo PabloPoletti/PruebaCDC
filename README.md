@@ -70,7 +70,14 @@ GROQ_API_KEY = "tu_api_key_aqui"
 
 Obtener API Key gratis en: https://console.groq.com/keys
 
-### 4. Ejecutar la aplicación
+### 4. (Opcional) Agregar imágenes
+Guarda las imágenes del CDC en la carpeta `images/`:
+- `cdc_frente.jpg` - Foto del frente del Centro
+- `logos_institucionales.jpg` - Logos de las instituciones
+
+Ver `images/README.md` para más detalles.
+
+### 5. Ejecutar la aplicación
 ```bash
 streamlit run app.py
 ```
@@ -80,10 +87,11 @@ streamlit run app.py
 ## 🌐 Deploy en Streamlit Cloud
 
 1. Fork este repositorio
-2. Ve a https://share.streamlit.io/
-3. Conecta tu repositorio de GitHub
-4. Configura el secret `GROQ_API_KEY` en Settings → Secrets
-5. Deploy!
+2. (Opcional) Agrega las imágenes en la carpeta `images/`
+3. Ve a https://share.streamlit.io/
+4. Conecta tu repositorio de GitHub
+5. Configura el secret `GROQ_API_KEY` en Settings → Secrets
+6. Deploy!
 
 ---
 
@@ -114,6 +122,10 @@ PruebaCDC/
 │   ├── info_cdc.txt         # Información del CDC
 │   ├── talleres.txt         # Info de talleres
 │   └── preguntas_frecuentes.txt
+├── images/                   # Imágenes del CDC
+│   ├── cdc_frente.jpg       # Foto del frente (opcional)
+│   ├── logos_institucionales.jpg  # Logos (opcional)
+│   └── README.md            # Instrucciones de imágenes
 ├── .streamlit/
 │   └── config.toml          # Configuración de Streamlit
 └── README.md                # Este archivo

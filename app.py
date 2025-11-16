@@ -707,8 +707,12 @@ Programa radial sobre diferentes temáticas de salud mental para llegar a la cas
 # INTERFAZ STREAMLIT
 # =====================================================
 
-# Título
+# Título con imagen
 st.markdown('<div class="main-title"><h1>🏥 Centro de Día Comunitario</h1><p>25 de Mayo - La Pampa</p></div>', unsafe_allow_html=True)
+
+# Imagen del Centro de Día (si existe)
+if os.path.exists("images/cdc_frente.jpg"):
+    st.image("images/cdc_frente.jpg", use_container_width=True, caption="Centro de Día Comunitario - 25 de Mayo")
 
 # Inicializar historial de chat
 if "messages" not in st.session_state:
@@ -755,9 +759,18 @@ if st.button("🔄 Nueva conversación"):
     st.session_state.messages = []
     if "user_states" in st.session_state:
         st.session_state.user_states = {}
+    # Agregar mensaje de bienvenida automático
+    welcome_msg = bot_response("hola", "web_user")
+    st.session_state.messages.append({"role": "assistant", "content": welcome_msg})
     st.rerun()
 
-# Footer
+# Footer con logos institucionales
 st.markdown("---")
+
+# Logos de las instituciones (si existen)
+if os.path.exists("images/logos_institucionales.jpg"):
+    st.image("images/logos_institucionales.jpg", use_container_width=True)
+
 st.markdown("💚 *Bot de atención automatizada - Centro de Día Comunitario 25 de Mayo*")
+st.markdown("*Trabajo conjunto: SEDRONAR, Subsecretaría de Salud Mental y Adicciones de La Pampa, Municipalidad de 25 de Mayo*")
 

@@ -55,4 +55,10 @@ RESUMEN*.md
 subir_a_github.bat
 *.docx
 *.doc
+descargar_imagenes.py
+
+# Imágenes (se suben al repo pero se ignoran localmente si son muy grandes)
+# Descomentar la siguiente línea si las imágenes son muy pesadas:
+# images/*.jpg
+# images/*.png
 
