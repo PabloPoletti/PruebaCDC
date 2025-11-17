@@ -189,6 +189,11 @@ def bot_response(raw, user_id):
     msg = raw.strip().lower()
     state = get_user_state(user_id)
     
+    # Detección de comando "volver al menú" en cualquier momento
+    if msg in ["0", "menu", "menú", "volver", "inicio"]:
+        state["step"] = "menu"
+        return menu_principal()
+    
     # Detección automática de preguntas
     question_keywords = ["qué", "que", "cómo", "como", "cuándo", "cuando", "dónde", "donde", 
                          "por qué", "porque", "cuál", "cual", "quién", "quien", "horario", 
@@ -201,9 +206,9 @@ def bot_response(raw, user_id):
     
     if state["step"] == "menu":
         if msg in ["1", "uno"]:
-            return f"{INFO_CENTRO}{menu_principal()}"
+            return f"{INFO_CENTRO}\n\n_Escribí *0* o *menú* para volver al menú principal._"
         elif msg in ["2", "dos"]:
-            return f"📍 {DIRECCION}\n📞 {TELEFONO}\n📧 {EMAIL}\n\n⏰ {HORARIOS}{menu_principal()}"
+            return f"📍 *Ubicación y Contacto*\n\n🏠 Dirección: {DIRECCION}\n📞 Teléfono: {TELEFONO}\n📧 Email: {EMAIL}\n\n⏰ *Horarios:*\n{HORARIOS}\n\n💡 Podés acercarte sin turno para primera consulta.\n\n_Escribí *0* o *menú* para volver al menú principal._"
         elif msg in ["3", "tres"]:
             return f"""🏥 *Servicios gratuitos del CDC:*
 
@@ -213,17 +218,37 @@ def bot_response(raw, user_id):
 • Primera escucha (demanda espontánea)
 • Talleres socio-terapéuticos
 • Capacitaciones
-• Articulaciones institucionales{menu_principal()}"""
+• Articulaciones institucionales
+
+📌 Todos los servicios son gratuitos
+📌 No se necesita derivación médica
+
+_Escribí *0* o *menú* para volver al menú principal._"""
         elif msg in ["4", "cuatro"]:
-            return """🎨 *Talleres disponibles:*
+            state["step"] = "talleres_menu"
+            return """🎨 *Talleres del CDC*
 
-1. TransformArte (reciclado): Lun y Jue 18-20hs
-2. Amor de Huerta: Mar y Vie 18:30-20:30, Mié 10:30-12:30
-3. Teatro y Escritura: Vie 18-19hs
-4. Espacio Grupal: Mié 14hs
-5. Columna Radial
+1️⃣ *TransformArte* - Reciclado creativo
+   📅 Lunes y Jueves 18:00-20:00 hs
+   ♻️ Transformamos materiales reciclables en arte
 
-👉 Todos los talleres son gratuitos y abiertos a la comunidad.""" + menu_principal()
+2️⃣ *Amor de Huerta* - Horticultura
+   📅 Martes y Viernes 18:30-20:30 hs
+   📅 Miércoles 10:30-12:30 hs
+   🌱 Cultivamos alimentos y bienestar
+
+3️⃣ *Teatro Leído y Escritura*
+   📅 Viernes 18:00-19:00 hs
+   🎭 Expresión a través del arte escénico
+
+4️⃣ *Espacio Grupal* - Terapia grupal
+   📅 Miércoles 14:00 hs
+   💬 Acompañamiento terapéutico grupal
+
+5️⃣ *Columna Radial*
+   📻 Difusión en salud mental
+
+👉 Escribí el número para más información, o *0* para volver al menú."""
         elif msg in ["5", "cinco"]:
             state["step"] = "turno"
             return "📅 *Sistema de turnos con psiquiatra*\n\nLos turnos son los viernes por la mañana.\n\n👉 Escribí el número de la opción."
@@ -233,9 +258,9 @@ def bot_response(raw, user_id):
                     f"📅 {t['fecha']} {t['hora']}\n👤 {t['nombre']}\n🧠 {t['motivo']}"
                     for t in state["mis_turnos"]
                 ])
-                return f"📋 *Tus turnos:*\n\n{turnos_text}{menu_principal()}"
+                return f"📋 *Tus turnos:*\n\n{turnos_text}\n\n_Escribí *0* o *menú* para volver al menú principal._"
             else:
-                return f"❌ No tenés turnos registrados.{menu_principal()}"
+                return f"❌ No tenés turnos registrados.\n\n_Escribí *0* o *menú* para volver al menú principal._"
         elif msg in ["7", "siete"] or is_question:
             # Inicializar RAG si no está
             if not hasattr(bot_response, 'llm'):
@@ -243,12 +268,12 @@ def bot_response(raw, user_id):
             
             if is_question and msg not in ["7", "siete"]:
                 answer = rag_answer(raw, bot_response.llm, bot_response.knowledge_base)
-                return f"🤖 {answer}{menu_principal()}"
+                return f"🤖 {answer}\n\n_Escribí *0* o *menú* para volver al menú principal._"
             else:
                 state["step"] = "rag"
-                return "🧠 Escribí tu pregunta sobre el Centro de Día:"
+                return "🧠 *Pregunta abierta con IA*\n\nEscribí tu pregunta sobre el Centro de Día y te responderé usando toda la información disponible.\n\n_Escribí *0* para cancelar y volver al menú._"
         else:
-            return f"❌ Opción inválida. Elegí un número del 1 al 7.{menu_principal()}"
+            return f"❌ Opción inválida. Elegí un número del 1 al 7.\n\n_Escribí *0* o *menú* para volver al menú principal._"
     
     if state["step"] == "rag":
         if not hasattr(bot_response, 'llm'):
@@ -256,16 +281,137 @@ def bot_response(raw, user_id):
         
         answer = rag_answer(raw, bot_response.llm, bot_response.knowledge_base)
         state["step"] = "menu"
-        return f"🤖 {answer}{menu_principal()}"
+        return f"🤖 {answer}\n\n_Escribí *0* o *menú* para volver al menú principal._"
+    
+    # SUBMENÚ DE TALLERES
+    if state["step"] == "talleres_menu":
+        if msg in ["0", "menu", "menú", "volver"]:
+            state["step"] = "menu"
+            return menu_principal()
+        elif msg in ["1", "uno"]:
+            state["step"] = "menu"
+            return """🎨 *TransformArte*
+
+♻️ *¿Qué es?*
+Taller de reciclado creativo donde transformamos materiales descartables en obras de arte y objetos útiles. Trabajamos con cartón, plásticos, telas y otros materiales.
+
+📅 *Horarios:*
+• Lunes 18:00 a 20:00 hs
+• Jueves 18:00 a 20:00 hs
+
+👥 *¿Para quién?*
+Abierto a toda la comunidad. No se requiere experiencia previa.
+
+💚 *Beneficios:*
+• Desarrollo de la creatividad
+• Conciencia ambiental
+• Espacio de encuentro y socialización
+• Gratuito y sin inscripción
+
+📍 Te esperamos en Trenel 53, 25 de Mayo.
+
+_Escribí *0* o *menú* para volver._"""
+        elif msg in ["2", "dos"]:
+            state["step"] = "menu"
+            return """🌱 *Amor de Huerta*
+
+🥬 *¿Qué es?*
+Taller de horticultura donde aprendemos a cultivar nuestros propios alimentos de forma orgánica. Armamos almácigos, cuidamos plantas y cosechamos verduras.
+
+📅 *Horarios:*
+• Martes 18:30 a 20:30 hs
+• Miércoles 10:30 a 12:30 hs
+• Viernes 18:30 a 20:30 hs
+
+👥 *¿Para quién?*
+Familias, adultos mayores, jóvenes. Todos pueden participar.
+
+💚 *Beneficios:*
+• Conexión con la naturaleza
+• Alimentación saludable
+• Trabajo en equipo
+• Actividad física al aire libre
+• Gratuito y sin inscripción
+
+🥕 ¡Llevate tus propias verduras a casa!
+
+_Escribí *0* o *menú* para volver._"""
+        elif msg in ["3", "tres"]:
+            state["step"] = "menu"
+            return """🎭 *Teatro Leído y Escritura*
+
+📖 *¿Qué es?*
+Espacio de expresión artística donde leemos obras de teatro y creamos nuestros propios textos. Exploramos personajes, emociones y narrativas.
+
+📅 *Horarios:*
+• Viernes 18:00 a 19:00 hs
+
+👥 *¿Para quién?*
+Personas interesadas en el teatro, la lectura y la escritura creativa. No se requiere experiencia.
+
+💚 *Beneficios:*
+• Desarrollo de la expresión oral
+• Estímulo de la creatividad
+• Espacio de reflexión
+• Trabajo colaborativo
+• Gratuito y sin inscripción
+
+🎬 ¡Animate a explorar nuevas formas de expresión!
+
+_Escribí *0* o *menú* para volver._"""
+        elif msg in ["4", "cuatro"]:
+            state["step"] = "menu"
+            return """💬 *Espacio Grupal*
+
+🤝 *¿Qué es?*
+Dispositivo terapéutico grupal coordinado por profesionales de salud mental. Es un espacio de escucha, contención y acompañamiento mutuo.
+
+📅 *Horarios:*
+• Miércoles 14:00 hs
+
+👥 *¿Para quién?*
+Personas que estén transitando procesos personales y busquen apoyo grupal.
+
+💚 *Beneficios:*
+• Acompañamiento profesional
+• Contención emocional
+• Aprendizaje compartido
+• Espacio confidencial y seguro
+• Gratuito
+
+🧠 La participación es voluntaria y requiere continuidad.
+
+_Escribí *0* o *menú* para volver._"""
+        elif msg in ["5", "cinco"]:
+            state["step"] = "menu"
+            return """📻 *Columna Radial*
+
+🎙️ *¿Qué es?*
+Espacio de difusión en medios locales donde hablamos sobre salud mental, consumos problemáticos y actividades del CDC.
+
+📡 *¿Dónde escucharnos?*
+Radio local de 25 de Mayo (consultá días y horarios en el CDC)
+
+💚 *Objetivo:*
+• Desestigmatizar la salud mental
+• Difundir información útil
+• Acercar el CDC a la comunidad
+• Dar voz a les participantes
+
+🗣️ ¡Podés participar! Acercate al CDC.
+
+_Escribí *0* o *menú* para volver._"""
+        else:
+            return "❌ Opción inválida. Escribí un número del 1 al 5, o *0* para volver al menú."
     
     # Manejo de turnos (simplificado)
     if state["step"] == "turno":
         # Aquí iría la lógica completa de turnos
         # Por ahora, retornar al menú
         state["step"] = "menu"
-        return f"🚧 Sistema de turnos en desarrollo.{menu_principal()}"
+        return f"🚧 Sistema de turnos en desarrollo.\n\n_Escribí *0* o *menú* para volver._"
     
-    return f"❌ No entendí tu mensaje.{menu_principal()}"
+    return f"❌ No entendí tu mensaje.\n\n_Escribí *0* o *menú* para volver al menú principal._"
 
 # Inicializar RAG al importar
 print("Inicializando sistema RAG...")
