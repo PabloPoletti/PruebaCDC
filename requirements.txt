@@ -6,3 +6,7 @@ langchain-huggingface
 chromadb
 sentence-transformers
 pandas
+gspread
+google-auth
+google-auth-oauthlib
+google-auth-httplib2

@@ -9,6 +9,22 @@ import pandas as pd
 from datetime import datetime, timedelta
 from langchain_groq import ChatGroq
 
+# Importar gestor de Google Sheets
+try:
+    from sheets_manager import (
+        get_turnos_disponibles,
+        get_turnos_usuario,
+        get_proximos_viernes,
+        guardar_turno,
+        cancelar_turno,
+        verificar_conexion as verificar_sheets
+    )
+    SHEETS_DISPONIBLE = True
+    print("✅ Módulo sheets_manager importado correctamente")
+except ImportError as e:
+    print(f"⚠️ No se pudo importar sheets_manager: {e}")
+    SHEETS_DISPONIBLE = False
+
 # =====================================================
 # CONFIGURACIÓN
 # =====================================================
@@ -281,12 +297,35 @@ _Escribí *0* o *menú* para volver al menú principal._"""
             state["step"] = "turno"
             return "📅 *Sistema de turnos con psiquiatra*\n\nLos turnos son los viernes por la mañana.\n\n👉 Escribí el número de la opción."
         elif msg in ["6", "seis"]:
-            if state["mis_turnos"]:
-                turnos_text = "\n\n".join([
-                    f"📅 {t['fecha']} {t['hora']}\n👤 {t['nombre']}\n🧠 {t['motivo']}"
-                    for t in state["mis_turnos"]
-                ])
-                return f"📋 *Tus turnos:*\n\n{turnos_text}\n\n_Escribí *0* o *menú* para volver al menú principal._"
+            if not SHEETS_DISPONIBLE:
+                # Fallback: usar turnos en memoria
+                if state["mis_turnos"]:
+                    turnos_text = "\n\n".join([
+                        f"📅 {t['fecha']} {t['hora']}\n👤 {t['nombre']}\n🧠 {t['motivo']}"
+                        for t in state["mis_turnos"]
+                    ])
+                    return f"📋 *Tus turnos:*\n\n{turnos_text}\n\n_Escribí *0* o *menú* para volver al menú principal._"
+                else:
+                    return f"❌ No tenés turnos registrados.\n\n_Escribí *0* o *menú* para volver al menú principal._"
+            
+            # Consultar turnos desde Google Sheets
+            turnos_usuario = get_turnos_usuario(user_id)
+            
+            if turnos_usuario:
+                turnos_text = ""
+                for idx, turno in enumerate(turnos_usuario, 1):
+                    # Convertir fecha a formato legible
+                    try:
+                        fecha_obj = datetime.strptime(turno['fecha'], '%Y-%m-%d')
+                        fecha_legible = fecha_obj.strftime('%d/%m/%Y')
+                    except:
+                        fecha_legible = turno['fecha']
+                    
+                    turnos_text += f"{idx}. 📅 {fecha_legible} - {turno['hora']} hs\n"
+                    turnos_text += f"   👤 {turno['nombre']}\n"
+                    turnos_text += f"   🧠 {turno['motivo']}\n\n"
+                
+                return f"📋 *Tus turnos:*\n\n{turnos_text}_Escribí *0* o *menú* para volver al menú principal._"
             else:
                 return f"❌ No tenés turnos registrados.\n\n_Escribí *0* o *menú* para volver al menú principal._"
         elif msg in ["7", "siete"] or is_question:
@@ -434,12 +473,136 @@ _Escribí *0* o *menú* para volver._"""
         else:
             return "❌ Opción inválida. Escribí un número del 1 al 5, o *0* para volver al menú."
     
-    # Manejo de turnos (simplificado)
+    # Manejo de turnos
     if state["step"] == "turno":
-        # Aquí iría la lógica completa de turnos
-        # Por ahora, retornar al menú
-        state["step"] = "menu"
-        return f"🚧 Sistema de turnos en desarrollo.\n\n_Escribí *0* o *menú* para volver._"
+        if not SHEETS_DISPONIBLE:
+            state["step"] = "menu"
+            return "⚠️ Sistema de turnos temporalmente no disponible. Llamá al 299 4152668 para agendar.\n\n_Escribí *0* o *menú* para volver._"
+        
+        # Mostrar próximos viernes disponibles
+        viernes = get_proximos_viernes(4)
+        state["step"] = "turno_fecha"
+        state["data"]["viernes_disponibles"] = viernes
+        
+        mensaje = "📅 *Seleccioná una fecha:*\n\n"
+        for idx, fecha in enumerate(viernes, 1):
+            # Convertir fecha a formato legible
+            fecha_obj = datetime.strptime(fecha, '%Y-%m-%d')
+            fecha_legible = fecha_obj.strftime('%d/%m/%Y')
+            mensaje += f"{idx}️⃣ {fecha_legible}\n"
+        
+        mensaje += "\n👉 Escribí el número de la fecha."
+        return mensaje
+    
+    if state["step"] == "turno_fecha":
+        if msg in ["1", "2", "3", "4"]:
+            idx = int(msg) - 1
+            fecha_elegida = state["data"]["viernes_disponibles"][idx]
+            state["data"]["fecha"] = fecha_elegida
+            
+            # Obtener horarios disponibles
+            horarios_disponibles = get_turnos_disponibles(fecha_elegida)
+            
+            if not horarios_disponibles:
+                state["step"] = "turno"
+                return "❌ No hay horarios disponibles para esa fecha. Elegí otra fecha."
+            
+            state["data"]["horarios_disponibles"] = horarios_disponibles
+            state["step"] = "turno_hora"
+            
+            # Convertir fecha a formato legible
+            fecha_obj = datetime.strptime(fecha_elegida, '%Y-%m-%d')
+            fecha_legible = fecha_obj.strftime('%d/%m/%Y')
+            
+            mensaje = f"🕒 *Horarios disponibles para {fecha_legible}:*\n\n"
+            for idx, hora in enumerate(horarios_disponibles, 1):
+                mensaje += f"{idx}️⃣ {hora} hs\n"
+            
+            mensaje += "\n👉 Escribí el número del horario."
+            return mensaje
+        else:
+            return "❌ Opción inválida. Escribí un número del 1 al 4."
+    
+    if state["step"] == "turno_hora":
+        if msg.isdigit() and 1 <= int(msg) <= len(state["data"]["horarios_disponibles"]):
+            idx = int(msg) - 1
+            hora_elegida = state["data"]["horarios_disponibles"][idx]
+            state["data"]["hora"] = hora_elegida
+            state["step"] = "turno_nombre"
+            return "👤 *Datos personales*\n\nEscribí tu nombre completo:"
+        else:
+            return f"❌ Opción inválida. Escribí un número del 1 al {len(state['data']['horarios_disponibles'])}."
+    
+    if state["step"] == "turno_nombre":
+        state["data"]["nombre"] = raw
+        state["step"] = "turno_dni"
+        return "🆔 Escribí tu DNI (solo números):"
+    
+    if state["step"] == "turno_dni":
+        if not msg.isdigit() or len(msg) < 7:
+            return "❌ DNI inválido. Escribí solo números (ej: 12345678):"
+        
+        state["data"]["dni"] = msg
+        state["step"] = "turno_motivo"
+        return "📋 Escribí el motivo de la consulta:"
+    
+    if state["step"] == "turno_motivo":
+        state["data"]["motivo"] = raw
+        state["step"] = "turno_primera_vez"
+        return "❓ ¿Es tu primera consulta en el CDC?\n\n1️⃣ Sí\n2️⃣ No"
+    
+    if state["step"] == "turno_primera_vez":
+        if msg in ["1", "si", "sí"]:
+            primera_vez = "Si"
+        elif msg in ["2", "no"]:
+            primera_vez = "No"
+        else:
+            return "❌ Respuesta inválida. Escribí *1* para Sí o *2* para No."
+        
+        # Guardar turno en Google Sheets
+        exito = guardar_turno(
+            telefono=user_id,
+            nombre=state["data"]["nombre"],
+            dni=state["data"]["dni"],
+            motivo=state["data"]["motivo"],
+            fecha=state["data"]["fecha"],
+            hora=state["data"]["hora"],
+            primera_vez=primera_vez
+        )
+        
+        if exito:
+            # Agregar a la lista de turnos del usuario
+            state["mis_turnos"].append({
+                "nombre": state["data"]["nombre"],
+                "fecha": state["data"]["fecha"],
+                "hora": state["data"]["hora"],
+                "motivo": state["data"]["motivo"]
+            })
+            
+            # Convertir fecha a formato legible
+            fecha_obj = datetime.strptime(state["data"]["fecha"], '%Y-%m-%d')
+            fecha_legible = fecha_obj.strftime('%d/%m/%Y')
+            
+            state["step"] = "menu"
+            state["data"] = {}  # Limpiar datos
+            
+            return f"""✅ *Turno confirmado*
+
+👤 Nombre: {state["mis_turnos"][-1]["nombre"]}
+📅 Fecha: {fecha_legible}
+🕒 Hora: {state["mis_turnos"][-1]["hora"]} hs
+🧠 Motivo: {state["mis_turnos"][-1]["motivo"]}
+
+📍 Dirección: {DIRECCION}
+📞 Teléfono: {TELEFONO}
+
+💡 Si necesitás cancelar, escribí *6* en el menú para ver tus turnos.
+
+_Escribí *0* o *menú* para volver al menú principal._"""
+        else:
+            state["step"] = "menu"
+            state["data"] = {}
+            return "❌ Error al guardar el turno. Por favor, intentá nuevamente o llamá al 299 4152668.\n\n_Escribí *0* o *menú* para volver._"
     
     return f"❌ No entendí tu mensaje.\n\n_Escribí *0* o *menú* para volver al menú principal._"
 

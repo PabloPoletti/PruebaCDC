@@ -12,6 +12,7 @@ RUN pip install --no-cache-dir -r requirements_whatsapp.txt
 # Copiar SOLO los archivos necesarios para el bot
 COPY whatsapp_bot.py .
 COPY bot_logic.py .
+COPY sheets_manager.py .
 
 # Copiar carpeta data (necesaria para RAG)
 COPY data/ ./data/
