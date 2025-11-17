@@ -1,0 +1,97 @@
+# Carpetas pesadas de ChromaDB y embeddings
+chroma/
+chroma_db/
+vectorstore/
+.chroma/
+
+# Python cache y temporales
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.py[cod]
+*$py.class
+*.so
+.cache/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Streamlit (no necesario para WhatsApp bot)
+.streamlit/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs y databases
+*.log
+*.sqlite
+*.db
+
+# Archivos de documentación (muy pesados)
+*.md
+GUIA*.md
+PLAN*.md
+README*.md
+INSTRUCCIONES*.md
+CAMBIOS*.md
+ACTUALIZACION*.md
+LEEME*.txt
+RESUMEN*.md
+
+# Imágenes (no necesarias para el bot)
+images/
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# Archivos de scripts locales
+crear_header.py
+descargar_imagenes.py
+subir_a_github.bat
+*.bat
+*.sh
+
+# Datos de turnos (se crean en runtime)
+turnos_data.json
+
+# Archivos temporales de Windows
+Thumbs.db
+desktop.ini
+
+# Archivos de macOS
+.DS_Store
+
+# Archivos de testing
+test/
+tests/
+*.test.py
+
+# Documentos Word/Excel
+*.docx
+*.xlsx
+*.doc
+*.xls
+
+# Archivos de ejemplo
+*.example
+env.example.txt
+.env.example
+
+# Cursor history
+.specstory/
+.cursorindexingignore
+
+# Node modules (si existen)
+node_modules/
+
