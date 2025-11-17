@@ -46,7 +46,7 @@ Thumbs.db
 
 # Archivos de prueba y documentación local
 codigo*.md
-CAMBIOS*.md
+# CAMBIOS*.md  # Comentado para permitir CAMBIOS_INFORMACION_CDC.md
 ACTUALIZACION*.md
 COMANDOS*.md
 INSTRUCCIONES*.md
