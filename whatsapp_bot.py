@@ -38,8 +38,7 @@ async def health_check():
         "rag_initialized": llm is not None and retriever is not None
     }
 
-@app.post("/whatsapp")
-async def whatsapp_webhook(
+async def handle_whatsapp_message(
     Body: str = Form(...),
     From: str = Form(...),
     To: str = Form(...),
@@ -101,6 +100,27 @@ async def whatsapp_webhook(
         )
         
         return Response(content=str(response), media_type="application/xml")
+
+# Registrar la misma función en ambas rutas (compatibilidad)
+@app.post("/webhook")
+async def webhook(
+    Body: str = Form(...),
+    From: str = Form(...),
+    To: str = Form(...),
+    MessageSid: str = Form(None)
+):
+    """Alias para /whatsapp - compatibilidad con diferentes configuraciones de Twilio"""
+    return await handle_whatsapp_message(Body, From, To, MessageSid)
+
+@app.post("/whatsapp")
+async def whatsapp(
+    Body: str = Form(...),
+    From: str = Form(...),
+    To: str = Form(...),
+    MessageSid: str = Form(None)
+):
+    """Webhook principal para mensajes de WhatsApp"""
+    return await handle_whatsapp_message(Body, From, To, MessageSid)
 
 @app.post("/status")
 async def whatsapp_status(request: Request):
