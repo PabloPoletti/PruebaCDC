@@ -18,6 +18,6 @@ COPY data/ ./data/
 # Exponer puerto
 EXPOSE 8000
 
-# Comando de inicio
-CMD ["uvicorn", "whatsapp_bot:app", "--host", "0.0.0.0", "--port", "8000"]
+# Comando de inicio (usar script de shell para expandir $PORT)
+CMD sh -c "uvicorn whatsapp_bot:app --host 0.0.0.0 --port ${PORT:-8000}"
 
