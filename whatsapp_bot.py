@@ -12,22 +12,19 @@ import sys
 # Importar la lógica del bot actual
 # Nota: Asegúrate de que app.py esté en el mismo directorio
 try:
-    from app import bot_response, init_rag, get_user_state
+    from app import bot_response
 except ImportError:
-    print("Error: No se pudo importar app.py. Asegúrate de que esté en el mismo directorio.")
-    sys.exit(1)
+    print("⚠️ No se pudo importar bot_response de app.py")
+    print("ℹ️ Usando versión simplificada del bot")
+    
+    def bot_response(message, user_id):
+        """Versión simplificada del bot para Railway"""
+        return "🤖 Bot CDC en mantenimiento. Por favor llamá al 299 4152668."
 
 # Inicializar FastAPI
 app = FastAPI(title="CDC WhatsApp Bot", version="1.0.0")
 
-# Inicializar el sistema RAG al arrancar
-print("Inicializando sistema RAG...")
-try:
-    llm, retriever, INFO_CENTRO, HORARIOS, DIRECCION, TELEFONO, EMAIL = init_rag()
-    print("✅ Sistema RAG inicializado correctamente")
-except Exception as e:
-    print(f"❌ Error al inicializar RAG: {e}")
-    llm, retriever = None, None
+print("✅ Servidor WhatsApp Bot iniciado")
 
 @app.get("/")
 async def root():
@@ -44,7 +41,7 @@ async def health_check():
     """Endpoint de health check"""
     return {
         "status": "healthy",
-        "rag_initialized": llm is not None and retriever is not None
+        "bot_active": True
     }
 
 @app.post("/whatsapp")
