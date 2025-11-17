@@ -1,0 +1,16 @@
+# Dependencias para WhatsApp Bot (FastAPI + Twilio)
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+twilio==8.10.0
+python-multipart==0.0.6
+
+# Dependencias existentes del bot
+streamlit
+langchain
+langchain-groq
+langchain-community
+langchain-huggingface
+chromadb
+sentence-transformers
+pandas
+
