@@ -8,9 +8,6 @@ import json
 import pandas as pd
 from datetime import datetime, timedelta
 from langchain_groq import ChatGroq
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.vectorstores import Chroma
-from langchain_core.documents import Document
 
 # =====================================================
 # CONFIGURACIÓN
@@ -90,7 +87,7 @@ def get_user_state(user_id):
     return USER_STATES[user_id]
 
 def init_rag():
-    """Inicializa el sistema RAG (sin persistencia pesada)"""
+    """Inicializa el sistema RAG ULTRA LIGERO (búsqueda en texto, sin embeddings)"""
     try:
         # Inicializar LLM
         groq_api_key = os.getenv("GROQ_API_KEY")
@@ -104,50 +101,56 @@ def init_rag():
             max_tokens=500
         )
         
-        # Crear embeddings (lightweight)
-        embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-L6-v2",
-            model_kwargs={'device': 'cpu'}
-        )
+        # Crear base de conocimiento simple (lista de textos)
+        knowledge_base = []
         
-        # Crear documentos
-        documents = [
-            Document(page_content=doc["content"], metadata={"title": doc["title"]})
-            for doc in DOC_TEXTS
-        ]
+        # Agregar documentos base
+        for doc in DOC_TEXTS:
+            knowledge_base.append(doc["content"])
         
         # Cargar archivos de data si existen
         data_files = ["info_cdc.txt", "talleres.txt", "preguntas_frecuentes.txt"]
         for filename in data_files:
             filepath = f"data/{filename}"
             if os.path.exists(filepath):
-                with open(filepath, "r", encoding="utf-8") as f:
-                    content = f.read()
-                    documents.append(Document(page_content=content, metadata={"source": filename}))
+                try:
+                    with open(filepath, "r", encoding="utf-8") as f:
+                        content = f.read()
+                        knowledge_base.append(content)
+                except:
+                    pass
         
-        # Crear vector store EN MEMORIA (no en disco)
-        vectorstore = Chroma.from_documents(
-            documents=documents,
-            embedding=embeddings,
-            collection_name="cdc_docs"
-        )
-        
-        retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
-        
-        return llm, retriever, INFO_CENTRO, HORARIOS, DIRECCION, TELEFONO, EMAIL
+        return llm, knowledge_base, INFO_CENTRO, HORARIOS, DIRECCION, TELEFONO, EMAIL
     
     except Exception as e:
         print(f"Error inicializando RAG: {e}")
-        return None, None, INFO_CENTRO, HORARIOS, DIRECCION, TELEFONO, EMAIL
+        return None, [], INFO_CENTRO, HORARIOS, DIRECCION, TELEFONO, EMAIL
 
-def rag_answer(query, llm, retriever):
-    """Responde usando RAG"""
-    if not llm or not retriever:
+def rag_answer(query, llm, knowledge_base):
+    """Responde usando RAG ULTRA LIGERO (búsqueda simple por keywords)"""
+    if not llm or not knowledge_base:
         return "⚠️ El sistema de respuestas inteligentes no está disponible temporalmente."
     
     try:
-        docs = retriever.invoke(query)
-        context = "\n\n".join([doc.page_content for doc in docs[:3]])
+        # Búsqueda simple: encontrar textos que contengan palabras de la query
+        query_lower = query.lower()
+        relevant_texts = []
+        
+        for text in knowledge_base:
+            text_lower = text.lower()
+            # Contar coincidencias de palabras
+            query_words = query_lower.split()
+            matches = sum(1 for word in query_words if len(word) > 3 and word in text_lower)
+            if matches > 0:
+                relevant_texts.append((matches, text))
+        
+        # Ordenar por relevancia y tomar los top 3
+        relevant_texts.sort(reverse=True, key=lambda x: x[0])
+        context = "\n\n".join([text for _, text in relevant_texts[:3]])
+        
+        # Si no hay contexto relevante, usar info general
+        if not context:
+            context = INFO_CENTRO + "\n\n" + HORARIOS
         
         prompt = f"""Sos un asistente del Centro de Día Comunitario de 25 de Mayo.
 Respondé la pregunta usando SOLO esta información:
@@ -236,10 +239,10 @@ def bot_response(raw, user_id):
         elif msg in ["7", "siete"] or is_question:
             # Inicializar RAG si no está
             if not hasattr(bot_response, 'llm'):
-                bot_response.llm, bot_response.retriever, _, _, _, _, _ = init_rag()
+                bot_response.llm, bot_response.knowledge_base, _, _, _, _, _ = init_rag()
             
             if is_question and msg not in ["7", "siete"]:
-                answer = rag_answer(raw, bot_response.llm, bot_response.retriever)
+                answer = rag_answer(raw, bot_response.llm, bot_response.knowledge_base)
                 return f"🤖 {answer}{menu_principal()}"
             else:
                 state["step"] = "rag"
@@ -249,9 +252,9 @@ def bot_response(raw, user_id):
     
     if state["step"] == "rag":
         if not hasattr(bot_response, 'llm'):
-            bot_response.llm, bot_response.retriever, _, _, _, _, _ = init_rag()
+            bot_response.llm, bot_response.knowledge_base, _, _, _, _, _ = init_rag()
         
-        answer = rag_answer(raw, bot_response.llm, bot_response.retriever)
+        answer = rag_answer(raw, bot_response.llm, bot_response.knowledge_base)
         state["step"] = "menu"
         return f"🤖 {answer}{menu_principal()}"
     
@@ -267,10 +270,10 @@ def bot_response(raw, user_id):
 # Inicializar RAG al importar
 print("Inicializando sistema RAG...")
 try:
-    bot_response.llm, bot_response.retriever, _, _, _, _, _ = init_rag()
+    bot_response.llm, bot_response.knowledge_base, _, _, _, _, _ = init_rag()
     print("✅ Sistema RAG inicializado correctamente")
 except Exception as e:
     print(f"⚠️ Error al inicializar RAG: {e}")
     bot_response.llm = None
-    bot_response.retriever = None
+    bot_response.knowledge_base = []
 
