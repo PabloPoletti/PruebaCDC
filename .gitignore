@@ -57,6 +57,13 @@ subir_a_github.bat
 *.doc
 descargar_imagenes.py
 
+# Guías locales (no subir a GitHub)
+guias/
+
+# Carpetas de organización local
+streamlit/
+whatsapp/
+
 # Imágenes (se suben al repo pero se ignoran localmente si son muy grandes)
 # Descomentar la siguiente línea si las imágenes son muy pesadas:
 # images/*.jpg
