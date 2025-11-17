@@ -19,6 +19,7 @@ pip-delete-this-directory.txt
 
 # Streamlit (no necesario para WhatsApp bot)
 .streamlit/
+app.py
 
 # Git
 .git/

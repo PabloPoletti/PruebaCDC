@@ -9,22 +9,16 @@ from twilio.twiml.messaging_response import MessagingResponse
 import os
 import sys
 
-# Importar la lógica del bot actual
-# Nota: Asegúrate de que app.py esté en el mismo directorio
+# Importar la lógica del bot (versión ligera sin Streamlit)
 try:
-    from app import bot_response
-except ImportError:
-    print("⚠️ No se pudo importar bot_response de app.py")
-    print("ℹ️ Usando versión simplificada del bot")
-    
-    def bot_response(message, user_id):
-        """Versión simplificada del bot para Railway"""
-        return "🤖 Bot CDC en mantenimiento. Por favor llamá al 299 4152668."
+    from bot_logic import bot_response
+    print("✅ Bot logic importado correctamente")
+except ImportError as e:
+    print(f"Error: No se pudo importar bot_logic.py: {e}")
+    sys.exit(1)
 
 # Inicializar FastAPI
 app = FastAPI(title="CDC WhatsApp Bot", version="1.0.0")
-
-print("✅ Servidor WhatsApp Bot iniciado")
 
 @app.get("/")
 async def root():
@@ -41,7 +35,7 @@ async def health_check():
     """Endpoint de health check"""
     return {
         "status": "healthy",
-        "bot_active": True
+        "rag_initialized": llm is not None and retriever is not None
     }
 
 @app.post("/whatsapp")
