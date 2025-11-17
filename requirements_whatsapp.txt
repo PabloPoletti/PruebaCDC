@@ -1,21 +1,13 @@
-# Dependencias MÍNIMAS para WhatsApp Bot (FastAPI + Twilio)
+# Dependencias para WhatsApp Bot (FastAPI + Twilio)
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 twilio==8.10.0
 python-multipart==0.0.6
 
-# LangChain básico (SIN embeddings pesados)
-langchain==0.1.9
-langchain-groq==0.1.3
-langchain-core==0.1.23
-
-# Groq API
-groq==0.4.2
-
-# Utilidades
-python-dotenv==1.0.0
-pydantic==2.5.3
-
-# Pandas (ligero)
-pandas==2.2.0
+# Dependencias del bot (versiones compatibles)
+langchain-groq
+langchain-community
+langchain-huggingface
+sentence-transformers
+pandas
 
