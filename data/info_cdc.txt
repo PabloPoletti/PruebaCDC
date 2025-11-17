@@ -27,14 +27,27 @@ Tiene por objetivo la inclusión social plena de las personas con padecimiento m
 
 ## UBICACIÓN Y CONTACTO
 
+**Nombre oficial:** Centro de Día Comunitario – 25 de Mayo
 **Dirección:** Calle Trenel N°53, Colonia 25 de Mayo, La Pampa
-**Horarios de atención:**
-- Mañana: 9:00 a 13:00 hs
-- Tarde: 15:00 a 18:30 hs
 **Teléfono:** 299 4152668
 **Email:** cdc.25demayolp.coordinacion@gmail.com
 
+## HORARIOS DE VERANO
+
+**Lunes a viernes (mañana):** 9:00 a 12:00 hs
+
+**Lunes, miércoles y jueves (tarde):** 16:00 a 19:00 hs
+
+**Martes y viernes (tarde):** 17:00 a 20:00 hs
+
 ## SERVICIOS Y ACTIVIDADES QUE OFRECE
+
+### Dispositivos Disponibles
+- **Acompañamiento para personas en situación de consumos problemáticos**
+- **Dispositivo grupal quincenal para familiares** de personas con consumos
+- **Talleres con modalidad terapéutica**
+- **Espacios grupales de salud mental**
+- **Psicoterapia individual** según evaluación y disponibilidad
 
 ### Abordajes Clínicos
 1. **Abordajes clínicos individuales** con nexo en los equipos de salud locales
@@ -68,9 +81,11 @@ El CDC ofrece diversos talleres durante la tarde:
    - Tratamiento de temas específicos en grupo
 
 5. **Columna Radial**
+   - Todos los lunes a las 11:00 hs en la radio municipal
+   - Abordaje de temas de salud mental
+   - Promoción de salud comunitaria
+   - Consumos problemáticos
    - A cargo del Lic. en Psicología Sebastián Mendicoa
-   - Abordaje de diferentes temáticas de salud mental
-   - Difusión comunitaria
 
 ## PROYECTO "LA VOZ DEL CDC"
 
@@ -102,6 +117,10 @@ El CDC trabaja con un enfoque:
 
 ## POBLACIÓN OBJETIVO
 
+**¿Quiénes pueden asistir?**
+Personas mayores de 13 años que necesiten acompañamiento, contención y espacios terapéuticos.
+
+Incluye:
 - Personas con problemáticas de salud mental
 - Personas con consumos problemáticos de sustancias
 - Familias y entorno de las personas en tratamiento
@@ -115,9 +134,25 @@ El CDC trabaja con un enfoque:
 - Talleristas especializados
 - Coordinadores/as
 
+## ACOMPAÑAMIENTO PSIQUIÁTRICO
+
+El psiquiatra del Centro de Día realiza el seguimiento y acompañamiento farmacológico de quienes lo necesitan.
+
+La interconsulta psiquiátrica es solicitada por el psicólogo/a del Centro, para trabajar de manera articulada en espacios individuales, grupales o talleres.
+
+## INGRESO AL CENTRO DE DÍA
+
+Para participar de las actividades se realiza una **primera escucha** con el equipo profesional.
+
+Luego de esta entrevista inicial se asignan turnos según disponibilidad para:
+- Psicoterapia individual
+- Talleres terapéuticos
+- Dispositivos grupales
+- Acompañamiento en salud mental comunitaria
+
 ## MODALIDAD DE ATENCIÓN
 
-- **Primera consulta:** Libre demanda, sin turno previo
+- **Primera consulta:** Libre demanda, sin turno previo (primera escucha)
 - **Seguimientos:** Con turno programado
 - **Talleres:** Inscripción previa
 - **Actividades comunitarias:** Abiertas a la comunidad

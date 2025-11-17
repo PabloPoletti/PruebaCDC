@@ -13,13 +13,17 @@ from langchain_groq import ChatGroq
 # CONFIGURACIÓN
 # =====================================================
 
-INFO_CENTRO = """El Centro de Día Comunitario de 25 de Mayo es un dispositivo territorial comunitario 
+INFO_CENTRO = """El Centro de Día Comunitario – 25 de Mayo es un dispositivo territorial comunitario 
 que brinda atención en salud mental y adicciones. Depende de la Subsecretaría de Salud Mental y 
-Adicciones del Gobierno de La Pampa, la Municipalidad de 25 de Mayo y SEDRONAR."""
+Adicciones del Gobierno de La Pampa, la Municipalidad de 25 de Mayo y SEDRONAR.
 
-HORARIOS = """Lunes a Viernes:
-• Mañana: 9:00 a 13:00 hs
-• Tarde: 15:00 a 18:30 hs"""
+¿Quiénes pueden asistir?
+Personas mayores de 13 años que necesiten acompañamiento, contención y espacios terapéuticos."""
+
+HORARIOS = """HORARIOS DE VERANO:
+• Lunes a viernes (mañana): 9:00 a 12:00 hs
+• Lunes, miércoles y jueves (tarde): 16:00 a 19:00 hs
+• Martes y viernes (tarde): 17:00 a 20:00 hs"""
 
 DIRECCION = "Trenel 53, Colonia 25 de Mayo, La Pampa"
 TELEFONO = "299 4152668"
@@ -37,20 +41,43 @@ DOC_TEXTS = [
     como parte del trabajo conjunto entre la municipalidad, provincia y nación para dar respuesta específica en materia 
     de consumos problemáticos y salud mental en 25 de Mayo."""},
     
-    # Servicios
-    {"title": "Atención profesional", "content": """Servicios de atención profesional:
-    - Psicoterapia individual: Martes, miércoles y viernes de 9 a 12 hs
-    - Grupos terapéuticos: Miércoles 14 hs
-    - Primera Escucha (demanda espontánea): Martes, jueves y viernes de 17:00 a 18:00 hs
-    - Psiquiatría: Viernes por la mañana (requiere turno previo)"""},
+    # Ingreso
+    {"title": "Ingreso al Centro de Día", "content": """Para participar de las actividades se realiza una primera escucha con el equipo profesional.
+    Luego de esta entrevista inicial se asignan turnos según disponibilidad para:
+    - Psicoterapia individual
+    - Talleres terapéuticos
+    - Dispositivos grupales
+    - Acompañamiento en salud mental comunitaria"""},
+    
+    # Dispositivos
+    {"title": "Dispositivos disponibles", "content": """Dispositivos del CDC:
+    - Acompañamiento para personas en situación de consumos problemáticos
+    - Dispositivo grupal quincenal para familiares de personas con consumos
+    - Talleres con modalidad terapéutica
+    - Espacios grupales de salud mental
+    - Psicoterapia individual según evaluación y disponibilidad"""},
+    
+    # Acompañamiento psiquiátrico
+    {"title": "Psiquiatría", "content": """El psiquiatra del Centro de Día realiza el seguimiento y acompañamiento farmacológico de quienes lo necesitan.
+    La interconsulta psiquiátrica es solicitada por el psicólogo/a del Centro, para trabajar de manera articulada en espacios individuales, grupales o talleres.
+    Atención: Viernes por la mañana (requiere turno previo)"""},
     
     # Talleres
     {"title": "Talleres", "content": """Talleres disponibles en el CDC:
     1. TransformArte (reciclado creativo): Lunes y jueves 18:00 a 20:00 hs
     2. Amor de Huerta (horticultura): Martes y viernes 18:30 a 20:30 hs, Miércoles 10:30 a 12:30 hs
+       El taller es gratuito. Como parte del circuito productivo, el grupo vende lo que produce (plantas y aromáticas) con fines formativos e integradores.
     3. Teatro Leído y Escritura: Viernes 18:00 a 19:00 hs
     4. Espacio Grupal (terapia grupal): Miércoles 14:00 hs
-    5. Columna Radial: Difusión en salud mental"""},
+    5. Columna Radial: Todos los lunes a las 11:00 hs en la radio municipal. Se abordan temas de salud mental, promoción de salud comunitaria y consumos problemáticos."""},
+    
+    # Preguntas frecuentes
+    {"title": "Preguntas frecuentes", "content": """
+    ¿Puedo asistir con compañía o con mi hijo si no tengo con quién dejarlo?
+    Sí. Podés asistir acompañado/a. Entendemos las situaciones familiares y buscamos facilitar el acceso.
+    
+    ¿Las actividades tienen costo?
+    No. Todas las actividades del Centro de Día son gratuitas."""},
 ]
 
 # Estado de usuarios (en memoria)
@@ -210,18 +237,19 @@ def bot_response(raw, user_id):
         elif msg in ["2", "dos"]:
             return f"📍 *Ubicación y Contacto*\n\n🏠 Dirección: {DIRECCION}\n📞 Teléfono: {TELEFONO}\n📧 Email: {EMAIL}\n\n⏰ *Horarios:*\n{HORARIOS}\n\n💡 Podés acercarte sin turno para primera consulta.\n\n_Escribí *0* o *menú* para volver al menú principal._"
         elif msg in ["3", "tres"]:
-            return f"""🏥 *Servicios gratuitos del CDC:*
+            return f"""🏥 *Servicios y Dispositivos del CDC:*
 
-• Atención psicológica individual
-• Atención psiquiátrica
-• Grupos terapéuticos
-• Primera escucha (demanda espontánea)
-• Talleres socio-terapéuticos
-• Capacitaciones
-• Articulaciones institucionales
+✅ Acompañamiento para personas en situación de consumos problemáticos
+✅ Dispositivo grupal quincenal para familiares de personas con consumos
+✅ Talleres con modalidad terapéutica
+✅ Espacios grupales de salud mental
+✅ Psicoterapia individual según evaluación y disponibilidad
+✅ Acompañamiento psiquiátrico (viernes por la mañana)
+✅ Primera escucha con el equipo profesional
 
 📌 Todos los servicios son gratuitos
 📌 No se necesita derivación médica
+📌 Atención para mayores de 13 años
 
 _Escribí *0* o *menú* para volver al menú principal._"""
         elif msg in ["4", "cuatro"]:
@@ -246,7 +274,7 @@ _Escribí *0* o *menú* para volver al menú principal._"""
    💬 Acompañamiento terapéutico grupal
 
 5️⃣ *Columna Radial*
-   📻 Difusión en salud mental
+   📻 Radio municipal - Lunes 11:00 hs
 
 👉 Escribí el número para más información, o *0* para volver al menú."""
         elif msg in ["5", "cinco"]:
@@ -387,16 +415,18 @@ _Escribí *0* o *menú* para volver._"""
             return """📻 *Columna Radial*
 
 🎙️ *¿Qué es?*
-Espacio de difusión en medios locales donde hablamos sobre salud mental, consumos problemáticos y actividades del CDC.
+Espacio de difusión en la radio municipal donde hablamos sobre salud mental, consumos problemáticos y actividades del CDC.
 
-📡 *¿Dónde escucharnos?*
-Radio local de 25 de Mayo (consultá días y horarios en el CDC)
+📡 *¿Cuándo escucharnos?*
+📅 **Todos los lunes a las 11:00 hs**
+📻 Radio municipal de 25 de Mayo
 
-💚 *Objetivo:*
-• Desestigmatizar la salud mental
-• Difundir información útil
-• Acercar el CDC a la comunidad
-• Dar voz a les participantes
+💚 *Temas que abordamos:*
+• Salud mental
+• Promoción de salud comunitaria
+• Consumos problemáticos
+• Actividades del CDC
+• Desestigmatización
 
 🗣️ ¡Podés participar! Acercate al CDC.
 

@@ -185,7 +185,10 @@ def init_rag():
 Dispositivo Territorial para salud mental y consumos problemáticos
 Dependencias: SEDRONAR, Subsecretaría de Salud Mental y Adicciones de La Pampa, Municipalidad de 25 de Mayo"""
     
-    HORARIOS = "Lunes a Viernes: Mañana 9 a 13 hs - Tarde 15 a 18:30 hs"
+    HORARIOS = """HORARIOS DE VERANO:
+Lunes a viernes (mañana): 9:00 a 12:00 hs
+Lunes, miércoles y jueves (tarde): 16:00 a 19:00 hs
+Martes y viernes (tarde): 17:00 a 20:00 hs"""
     DIRECCION = "Trenel 53, Colonia 25 de Mayo, La Pampa"
     TELEFONO = "299 4152668"
     EMAIL = "cdc.25demayolp.coordinacion@gmail.com"
